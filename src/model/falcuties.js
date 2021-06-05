@@ -14,10 +14,7 @@ const Falcuty = db.define('Falcuty',
     falcutyName: {
         type: DataTypes.STRING,
         allowNull: false,
-        validate:{
-            isAlpha: true,
-            
-        }
+        
          
     },
     createdAt:{

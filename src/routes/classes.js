@@ -1,15 +1,15 @@
 var express = require('express');
 var router = express.Router();
-const classModel = require('../model/classes');
-const falcutyModel = require('../model/falcuties');
-const studentModel = require('../model/students');
-const userModel = require('../model/users');
+const Class = require('../model/classes');
+const Falcuty = require('../model/falcuties');
+const Student = require('../model/students');
+const User = require('../model/users');
 
 
-/* GET users listing. */
+/* liet ke tat ca lop hoc. */
 router.get('/', async(req, res, next)=>{
     try {
-        let classes = await classModel.findAll();
+        let classes = await Class.findAll();
         
         if(!classes){
             
@@ -23,16 +23,25 @@ router.get('/', async(req, res, next)=>{
         return res.status(500).json(error);
     }
 })
-router.get('/:search', async(req, res, next)=>{
+// tim lop hoc bang tu khoa search
+/**
+ * @swagger
+ *
+ * /classes/search={search}:
+ *   get:
+ *     produces:
+ *       - application/json
+ */
+router.get('/search=:search', async(req, res, next)=>{
     const search = req.params.search;
     try {
-        let classes = await classModel.findAll({where: { className: {
+        let classes = await Class.findAll({where: { className: {
             $like : '%'+search+'%'
         }}});
         
-        if(!classes){
+        if(classes.length===0){
             
-            return res.status(404).json({error:{massage: "Chua co khoa nao, hay toa them khoa"}});
+            return res.status(404).json({error:{massage: "Khong tim thay lop hoc nao co ten: "+ search}});
             
         }else{
             
@@ -42,10 +51,12 @@ router.get('/:search', async(req, res, next)=>{
         return res.status(500).json(error);
     }
 })
-router.get('/student/:classId', async(req, res, next)=>{
+
+// lay danh sach hoc sinh bang class id
+router.get('/list-student/:classId', async(req, res, next)=>{
     const classId = req.params.classId;
     try {
-        let listStudent = await userModel.findAll({ include: {model: studentModel, where: { classId}} });
+        let listStudent = await User.findAll({ include: {model: Student, where: { classId}} });
         
         if(!listStudent){
             
@@ -60,16 +71,16 @@ router.get('/student/:classId', async(req, res, next)=>{
     }
 })
 
-
-router.post('/', async(req, res, next)=>{
+// them lop hoc
+router.post('/add-class', async(req, res, next)=>{
     const className = req.body.className;
     const falcutyName = req.body.falcutyName;
     try {
-        let _class = await classModel.findOne({where:{ className}});
-        const falcuty = await falcutyModel.findOne({where:{ falcutyName}})
+        let _class = await Class.findOne({where:{ className}});
+        const falcuty = await Falcuty.findOne({where:{ falcutyName}})
         if(!_class && falcuty){
             
-             _class =await classModel.create({className,FalcutyId: falcuty.id});
+             _class =await Class.create({className,FalcutyId: falcuty.id});
             return res.status(200).json(_class);
         }else if(!falcuty){
             return res.status(404).json({error:{massage: "falcuty not exist "}});
@@ -80,6 +91,20 @@ router.post('/', async(req, res, next)=>{
     } catch (error) {
         return res.status(500).json(error);
     }
-})
+});
+//xoa lop hoc bang id
+router.delete("/delete.:id", async (req, res, next) => {
+    id = req.params.id;
+    try {
+          const _class = await Class.findByPk(id);
+          if(!_class) return res.status(404).send('Khong tim thay lop hoc can xoa');
+          await Class.destroy({where: {id}})
+          return res.status(200).send('Xoa lop hoc thanh cong');
+      
+    } catch (error) {
+        console.log(error);
+      return res.status(500).json(error);
+    }
+  });
 
 module.exports = router;

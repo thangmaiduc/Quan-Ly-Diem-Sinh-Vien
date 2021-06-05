@@ -16,7 +16,8 @@ const StudentHasSubject = db.define('StudentHasSubject',
         references:{
             model: Score,
             key: 'id'
-        }
+        },
+       
     }
     
 },

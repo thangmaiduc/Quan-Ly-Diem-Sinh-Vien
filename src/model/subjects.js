@@ -14,10 +14,7 @@ const Subject = db.define('Subject',
     subjectName: {
         type: DataTypes.STRING,
         allowNull: false,
-        validate:{
-            isAlpha: true,
-            
-        }
+        
     },
     numOfCredit:{
         type: DataTypes.INTEGER,

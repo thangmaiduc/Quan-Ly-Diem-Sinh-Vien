@@ -5,9 +5,11 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const db = require('./db/db');
 var indexRouter = require('./routes/index');
+var subjectRouter = require('./routes/subjects');
 var usersRouter = require('./routes/users');
 var classesRouter = require('./routes/classes');
-var falcutiesRouter = require('./routes/falcuties');
+var falcutiesRouter = require('./routes/falcuties');var session = require('express-session');
+
 
 const userModel = require('./model/users') ;
 const studentModel = require('./model/students') ;
@@ -17,7 +19,29 @@ const falcutyModel = require('./model/falcuties') ;
 const studentHasSubject = require('./model/student_has_subject') ;
 const subjectModel = require('./model/subjects') ;
 const teachModel = require('./model/teach') ;
+
+// const swaggerJsDoc = require('swagger-jsdoc');
+// const swaggerUiExpress = require('swagger-ui-express');
 var app = express();
+
+// const options = {
+//   definition: {
+//     openapi: '3.0.0',
+//     info: {
+//       title: 'Manager Student API',
+//       version: '1.0.0',
+//     },
+//     servers:[
+//       {
+//         url: 'http://localhost:3000'
+//       }
+//     ]
+//   },
+//   apis: ['./src/routes/*.js'], // files containing annotations as above
+// };
+
+// const spec = swaggerJsDoc(options);
+// app.use('/api-docs', swaggerUiExpress.serve, swaggerUiExpress.setup(spec));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -26,6 +50,11 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true
+}))
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -33,6 +62,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/classes', classesRouter);
 app.use('/falcuties', falcutiesRouter);
+app.use('/subjects', subjectRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -86,7 +116,7 @@ teachModel.belongsTo(classModel);
 
 
 
-db.sync({alter: true})
+db.sync()
   .then()
   .catch(err=>{
     console.log(err);
