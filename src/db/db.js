@@ -1,6 +1,6 @@
 const { Sequelize,DataTypes, Model, Op, QueryTypes   } = require('sequelize');
-const db = new Sequelize('qlsv2', 'qlsv', '12345', {
-  host: 'localhost',
+const db = new Sequelize('qlsv2'||process.env.DB_NAME  , process.env.DB_USERNAME|| 'qlsv', process.env.DB_PASSWORD || '12345', {
+  host: process.env.HOST || 'localhost',
   dialect: 'mysql',
   define: {
     freezeTableName: true
