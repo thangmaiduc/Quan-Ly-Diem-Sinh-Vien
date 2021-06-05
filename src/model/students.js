@@ -26,7 +26,9 @@ const Student = db.define('Student',
    timestamps: false
 });
 
-
+Student.prototype.toJSON = function(){
+    return undefined
+}
 
 
 module.exports = Student;

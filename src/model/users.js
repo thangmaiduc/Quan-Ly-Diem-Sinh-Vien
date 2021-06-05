@@ -96,6 +96,26 @@ const User =db.define('User',
     
 });
 
+User.prototype.toJSON = function(){
+    return {...this.get(), id: undefined, password: undefined, createdAt: undefined, updatedAt: undefined, role: undefined,firstName: undefined,lastName: undefined}
+};
+User.beforeCreate(async (user, option)=>{
+    const hashPassword =await bcrypt.hash(user.password,8);
+    user.password = hashPassword;
+});
+
+User.findByCredentials= async (email, password)=>{
+    
+    user = await User.findOne({where:{email}})
+    if(!user){
+       return null;
+    }
+    const isMatch= bcrypt.compare(password,user.password)
+    if(!isMatch){
+        return null;
+    }
+    return user;
+};
 
      
     // create = build+save

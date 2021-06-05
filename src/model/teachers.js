@@ -16,5 +16,7 @@ const Teacher = db.define('Teacher',
     tableName: 'teachers',
     timestamps: false
 })
-
+Teacher.prototype.toJSON = function(){
+    return undefined
+}
 module.exports = Teacher;

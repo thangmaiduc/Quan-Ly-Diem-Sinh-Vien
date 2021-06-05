@@ -28,26 +28,34 @@ const encodeToken = (userId, role) => {
   return token;
 };
 
+
 router.post("/signin", async (req, res, next) => {
   const { email, password } = req.body;
   try {
-    const user = await userModel.findOne({ where: { email }, });
-    if (!user) {
-      res.status(404).json({ error: { massage: "Email is not exist" } });
-    } else {
-      if (user.password !== password) {
-        res.status(400).json({ error: { massage: "Password is invalid" } });
-      } else {
+    // const user = await userModel.findOne({ where: { email }, });
+    // if (!user) {
+    //   res.status(404).json({ error: { massage: "Email is not exist" } });
+    // } else {
+    //   if (user.password !== password) {
+    //     res.status(400).json({ error: { massage: "Password is invalid" } });
+    //   } else {
        
-        const token = encodeToken(user.id);
+    //     const token = encodeToken(user.id);
 
-        res.setHeader("Authorization", token);
-        res.status(200).json({ user });
-      }
+    //     res.setHeader("Authorization", token);
+    //     res.status(200).json({ user });
+    //   }
+    // }
+    const user = await userModel.findByCredentials(email, password);
+    if(!user) {
+      res.status(404).json({ error: { massage: "Email and Password is invalid" } });
     }
+    const token = encodeToken(user.id);
+    res.setHeader("Authorization", token);
+    res.status(200).json({ user });
   } catch (error) {
     console.log(error);
-    res.status(500).json(error);
+    return res.status(500).send(error);
   }
 });
 
