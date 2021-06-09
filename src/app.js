@@ -69,7 +69,7 @@ app.use('/classes', classesRouter);
 app.use('/falcuties', falcutiesRouter);
 app.use('/subjects', subjectRouter);
 app.use('/credit-class', creditClassRouter);
-app.use('/', scoreRouter);
+app.use( scoreRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -130,8 +130,5 @@ db.sync({force: false})
     console.log(err);
     console.log('Syncing database was fail');
   })
-const port = process.env.PORT;
-  app.listen(port, ()=> {
-    console.log('Server is up to on port '+ port);
-})
+
 module.exports = app;

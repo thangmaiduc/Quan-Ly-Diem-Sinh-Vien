@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     
-    "start": "node ./src/app.js",
-    "dev": "env-cmd -f ./config/dev.env nodemon ./src/app.js"
+    "start": "node  ./bin/www",
+    "dev": "env-cmd -f ./config/dev.env nodemon ./bin/www"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
