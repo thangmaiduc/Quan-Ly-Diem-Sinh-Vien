@@ -22,7 +22,7 @@ const Student = db.define('Student',
     
 },
 {
-    tableName: 'Students',
+    tableName: 'students',
    timestamps: false
 });
 

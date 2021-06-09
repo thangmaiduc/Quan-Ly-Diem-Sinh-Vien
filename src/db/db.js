@@ -20,7 +20,7 @@ const db = new Sequelize(process.env.DB_NAME , process.env.DB_USERNAME, process.
 test = async() =>{
   try {
     await db.authenticate();
-    console.log('Connection has been established successfully.');
+    console.log('Connection has been established successfully.'+ process.env.HOST );
   } catch (error) {
     console.error('Unable to connect to the database:', error);
   }

@@ -50,7 +50,7 @@ router.get('/list-student/:classId',authUser, authRole('admin'), async(req, res,
     const classId = req.params.classId;
     try {
         const _class = await Class.findByPk(classId);
-        let listStudent = await User.findAll({ include: {model: Student, where: { classId}} });
+        let listStudent = await User.findAll({ include: {model: Student, where: { classId}}  });
         if(!_class) return res.status(404).json({error:{massage: "Khong tim thay lop nao"}});
         if(listStudent===[]){
             

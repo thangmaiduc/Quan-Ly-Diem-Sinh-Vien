@@ -42,10 +42,7 @@ router.get('/scores/get/:scoreid',setCreditClass, authUser, authGetCreditClass,a
   // giao vien va admin set diem thanh phan cho 1 hs 
   router.put('/scores/edit/:scoreid',setCreditClass, authUser ,authGetCreditClass, async (req, res, next)=>{
     const scoreId = req.params.scoreid;
-    
     try {
-    
-  
       await Score.update(req.body, {fields:["attadenceScore","homeworkScore","midtermScore","endtermScore"], where: {id:scoreId}});
       let scores = await Score.findByPk(scoreId);
   
