@@ -130,4 +130,8 @@ db.sync({force: false})
     console.log(err);
     console.log('Syncing database was fail');
   })
+const port = process.env.PORT;
+  app.listen(port, ()=> {
+    console.log('Server is up to on port '+ port);
+})
 module.exports = app;
