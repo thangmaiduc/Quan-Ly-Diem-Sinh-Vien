@@ -1,5 +1,5 @@
 var express = require("express");
-var router = express.Router();
+var router =new express.Router();
 const StudentHasSubject = require("../model/student_has_subject");
 const { authUser,authRole} = require("../middlewave/auth");
 const Score = require("../model/scores");

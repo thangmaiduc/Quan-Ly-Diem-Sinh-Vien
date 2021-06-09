@@ -1,5 +1,5 @@
 var express = require("express");
-var router = express.Router();
+var router =new express.Router();
 const falcutyModel = require("../model/falcuties");
 const classModel = require("../model/classes");
 const { authUser, authRole } = require("../middlewave/auth");

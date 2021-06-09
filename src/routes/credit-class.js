@@ -1,5 +1,5 @@
 var express = require("express");
-var router = express.Router();
+var router =new express.Router();
 const Subject = require("../model/subjects");
 const StudentHasSubject = require("../model/student_has_subject");
 const userModel = require("../model/users");
