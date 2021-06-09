@@ -64,12 +64,12 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/classes', classesRouter);
-app.use('/falcuties', falcutiesRouter);
-app.use('/subjects', subjectRouter);
-app.use('/credit-class', creditClassRouter);
-app.use('/', scoreRouter);
+app.use('users', usersRouter);
+app.use('classes', classesRouter);
+app.use('falcuties', falcutiesRouter);
+app.use('subjects', subjectRouter);
+app.use('credit-class', creditClassRouter);
+app.use('', scoreRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
