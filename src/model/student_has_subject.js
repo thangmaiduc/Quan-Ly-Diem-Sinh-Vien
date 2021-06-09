@@ -7,17 +7,13 @@ const Subject = require('./subjects');
 const Student = require('./students');
 
 
-const StudentHasSubject = db.define('StudentHasSubject',
+const StudentHasSubject = db.define('studentHasSubject',
 {
     
-    scoreId: {
+    id: {
         type : DataTypes.INTEGER,
-        unique: true,
-        references:{
-            model: Score,
-            key: 'id'
-        },
-       
+        autoIncrement: true,
+        primaryKey: true
     }
     
 },
@@ -27,6 +23,8 @@ const StudentHasSubject = db.define('StudentHasSubject',
 });
 
 
-
+StudentHasSubject.prototype.toJSON = function(){
+    return {...this.get()}
+}
 
 module.exports = StudentHasSubject;

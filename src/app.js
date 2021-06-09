@@ -8,7 +8,10 @@ var indexRouter = require('./routes/index');
 var subjectRouter = require('./routes/subjects');
 var usersRouter = require('./routes/users');
 var classesRouter = require('./routes/classes');
-var falcutiesRouter = require('./routes/falcuties');var session = require('express-session');
+var creditClassRouter = require('./routes/credit-class');
+var scoreRouter = require('./routes/scores');
+var falcutiesRouter = require('./routes/falcuties');
+var session = require('express-session');
 
 
 const userModel = require('./model/users') ;
@@ -18,7 +21,9 @@ const classModel = require('./model/classes') ;
 const falcutyModel = require('./model/falcuties') ;
 const studentHasSubject = require('./model/student_has_subject') ;
 const subjectModel = require('./model/subjects') ;
-const teachModel = require('./model/teach') ;
+const CreditClass = require('./model/credit-class') ;
+const Score = require('./model/scores');
+const StudentHasSubject = require('./model/student_has_subject');
 
 // const swaggerJsDoc = require('swagger-jsdoc');
 // const swaggerUiExpress = require('swagger-ui-express');
@@ -63,6 +68,8 @@ app.use('/users', usersRouter);
 app.use('/classes', classesRouter);
 app.use('/falcuties', falcutiesRouter);
 app.use('/subjects', subjectRouter);
+app.use('/credit-class', creditClassRouter);
+app.use('/', scoreRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -84,8 +91,8 @@ userModel.hasOne(studentModel, {foreignKey: 'userId', onDelete: 'CASCADE'});
 userModel.hasOne(teacherModel, {foreignKey: 'userId', onDelete: 'CASCADE'});
 
 
-studentModel.belongsTo(classModel,{ foreignKey: 'classId'});
-classModel.hasMany(studentModel, { foreignKey: 'classId', constraints: true, onDelete: 'CASCADE'});
+studentModel.belongsTo(classModel,{ foreignKey: 'classId', onDelete: 'CASCADE'});
+classModel.hasMany(studentModel, { foreignKey: 'classId',  onDelete: 'CASCADE'});
 
 classModel.belongsTo(falcutyModel, { foreignKey: {allowNull:false,},  onDelete: 'CASCADE'});
 falcutyModel.hasMany(classModel);
@@ -93,30 +100,31 @@ falcutyModel.hasMany(classModel);
 teacherModel.belongsTo(falcutyModel, { foreignKey: {allowNull:false,},  onDelete: 'CASCADE'});
 falcutyModel.hasMany(teacherModel);
 
-studentModel.belongsToMany(subjectModel,{through: studentHasSubject});
-subjectModel.belongsToMany(studentModel,{through: studentHasSubject});
+studentModel.hasMany(studentHasSubject, { onDelete: 'CASCADE'});
+studentHasSubject.belongsTo(studentModel, { onDelete: 'CASCADE'});
+studentModel.belongsToMany(CreditClass,{through: studentHasSubject});
+CreditClass.belongsToMany(studentModel,{through: studentHasSubject });
 
-teacherModel.belongsToMany(subjectModel, {through: teachModel})
-subjectModel.belongsToMany(teacherModel, {through: teachModel})
+CreditClass.hasMany(studentHasSubject);
+studentHasSubject.belongsTo(CreditClass);
 
-classModel.belongsToMany(teacherModel, {through: teachModel})
-teacherModel.belongsToMany(classModel, {through: teachModel})
+teacherModel.hasMany(CreditClass, { onDelete: 'CASCADE'});
+CreditClass.belongsTo(teacherModel);
 
-classModel.belongsToMany(subjectModel, { through: teachModel})
-subjectModel.belongsToMany(classModel, { through: teachModel})
+subjectModel.hasMany(CreditClass, {onDelete: 'CASCADE'});
+CreditClass.belongsTo(subjectModel);
 
-teacherModel.hasMany(teachModel, { onDelete: 'CASCADE'});
-teachModel.belongsTo(teacherModel);
+classModel.hasMany(CreditClass, { onDelete: 'CASCADE'});
+CreditClass.belongsTo(classModel);  
 
-subjectModel.hasMany(teachModel, {onDelete: 'CASCADE'});
-teachModel.belongsTo(subjectModel);
+classModel.belongsToMany(subjectModel, { through: CreditClass})
+subjectModel.belongsToMany(classModel, { through: CreditClass})
 
-classModel.hasMany(teachModel, { onDelete: 'CASCADE'});
-teachModel.belongsTo(classModel);
+StudentHasSubject.hasOne(Score, { foreignKey: {allowNull:false, unique: true} ,onDelete: 'CASCADE'})
+Score.belongsTo(StudentHasSubject, { onDelete: 'CASCADE'})
 
 
-
-db.sync()
+db.sync({force: false})
   .then()
   .catch(err=>{
     console.log(err);

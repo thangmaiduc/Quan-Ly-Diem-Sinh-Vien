@@ -27,7 +27,7 @@ const Student = db.define('Student',
 });
 
 Student.prototype.toJSON = function(){
-    return undefined
+    return {...this.get(), userId: undefined, classId: undefined}
 }
 
 

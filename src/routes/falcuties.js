@@ -2,11 +2,12 @@ var express = require("express");
 var router = express.Router();
 const falcutyModel = require("../model/falcuties");
 const classModel = require("../model/classes");
+const { authUser, authRole } = require("../middlewave/auth");
 // const db = require('../db/db')
 
 /* GET users listing. */
 //liet ke toan bo khoa trong truong
-router.get("/", async (req, res, next) => {
+router.get("/",authUser, authRole('admin'), async (req, res, next) => {
   try {
     let falcuties = await falcutyModel.findAll();
 
@@ -22,7 +23,7 @@ router.get("/", async (req, res, next) => {
   }
 });
 //tim kiem khoa bang ten
-router.get("/search=:search", async (req, res, next) => {
+router.get("/search=:search",authUser,async (req, res, next) => {
   const search = req.params.search;
   try {
     let falcuties = await falcutyModel.findAll({
@@ -45,7 +46,7 @@ router.get("/search=:search", async (req, res, next) => {
   }
 });
 // liet ke danh sach lop thuoc khoa
-router.get("/list-class.:falcutyId", async (req, res, next) => {
+router.get("/list-class.:falcutyId", authUser, authRole('admin'),async (req, res, next) => {
   const falcutyId = req.params.falcutyId;
   try {
     let listClass = await classModel.findAll({ where: { falcutyId } });
@@ -62,7 +63,7 @@ router.get("/list-class.:falcutyId", async (req, res, next) => {
   }
 });
 // them khoa
-router.post("/add-falcuty", async (req, res, next) => {
+router.post("/add-falcuty",authUser, authRole('admin'), async (req, res, next) => {
   const falcutyName = req.body.falcutyName;
 
   try {

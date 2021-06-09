@@ -27,5 +27,7 @@ const Class = db.define('Class',
     tableName: 'classes',
     timestamps: true
 })
-
+Class.prototype.toJSON = function(){
+    return {...this.get(), createdAt: undefined, updatedAt: undefined, FalcutyId: undefined}
+};
 module.exports = Class;

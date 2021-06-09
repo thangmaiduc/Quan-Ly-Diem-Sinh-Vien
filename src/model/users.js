@@ -97,7 +97,7 @@ const User =db.define('User',
 });
 
 User.prototype.toJSON = function(){
-    return {...this.get(), id: undefined, password: undefined, createdAt: undefined, updatedAt: undefined, role: undefined,firstName: undefined,lastName: undefined}
+    return {...this.get(), password: undefined, createdAt: undefined, updatedAt: undefined, firstName: undefined,lastName: undefined}
 };
 User.beforeCreate(async (user, option)=>{
     const hashPassword =await bcrypt.hash(user.password,8);

@@ -30,5 +30,7 @@ const Subject = db.define('Subject',
     tableName: 'subjects',
     timestamps: false
 })
-
+Subject.prototype.toJSON = function(){
+    return {...this.get()}
+};
 module.exports = Subject;

@@ -1,4 +1,5 @@
 var express = require('express');
+const { authUser, authRole } = require('../middlewave/auth');
 var router = express.Router();
 const Class = require('../model/classes');
 const Falcuty = require('../model/falcuties');
@@ -7,7 +8,7 @@ const User = require('../model/users');
 
 
 /* liet ke tat ca lop hoc. */
-router.get('/', async(req, res, next)=>{
+router.get('/', authUser, authRole('admin'), async(req, res, next)=>{
     try {
         let classes = await Class.findAll();
         
@@ -23,16 +24,8 @@ router.get('/', async(req, res, next)=>{
         return res.status(500).json(error);
     }
 })
-// tim lop hoc bang tu khoa search
-/**
- * @swagger
- *
- * /classes/search={search}:
- *   get:
- *     produces:
- *       - application/json
- */
-router.get('/search=:search', async(req, res, next)=>{
+
+router.get('/search=:search',authUser, async(req, res, next)=>{
     const search = req.params.search;
     try {
         let classes = await Class.findAll({where: { className: {
@@ -53,14 +46,15 @@ router.get('/search=:search', async(req, res, next)=>{
 })
 
 // lay danh sach hoc sinh bang class id
-router.get('/list-student/:classId', async(req, res, next)=>{
+router.get('/list-student/:classId',authUser, authRole('admin'), async(req, res, next)=>{
     const classId = req.params.classId;
     try {
+        const _class = await Class.findByPk(classId);
         let listStudent = await User.findAll({ include: {model: Student, where: { classId}} });
-        
-        if(!listStudent){
+        if(!_class) return res.status(404).json({error:{massage: "Khong tim thay lop nao"}});
+        if(listStudent===[]){
             
-            return res.status(404).json({error:{massage: "Chua co khoa nao, hay toa them khoa"}});
+            return res.status(400).json({error:{massage: "Lop chua co sinh vien nao"}});
             
         }else{
             
@@ -72,7 +66,7 @@ router.get('/list-student/:classId', async(req, res, next)=>{
 })
 
 // them lop hoc
-router.post('/add-class', async(req, res, next)=>{
+router.post('/add-class',authUser, authRole('admin'), async(req, res, next)=>{
     const className = req.body.className;
     const falcutyName = req.body.falcutyName;
     try {
@@ -93,7 +87,7 @@ router.post('/add-class', async(req, res, next)=>{
     }
 });
 //xoa lop hoc bang id
-router.delete("/delete.:id", async (req, res, next) => {
+router.delete("/delete.:id", authUser, authRole('admin'),async (req, res, next) => {
     id = req.params.id;
     try {
           const _class = await Class.findByPk(id);

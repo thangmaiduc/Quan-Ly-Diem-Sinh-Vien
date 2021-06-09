@@ -28,5 +28,7 @@ const Falcuty = db.define('Falcuty',
     tableName: 'falcuties',
     timestamps: true
 })
-
+Falcuty.prototype.toJSON = function(){
+    return {...this.get(), createdAt: undefined, updatedAt: undefined}
+};
 module.exports = Falcuty;
