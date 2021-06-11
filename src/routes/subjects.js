@@ -48,7 +48,7 @@ router.get("/",authUser, authRole('admin'), async (req, res, next) => {
 
 
 //xoa lop hoc bang id
-router.delete("/.:id",authUser, authRole('admin'), async (req, res, next) => {
+router.delete("/delete/:id",authUser, authRole('admin'), async (req, res, next) => {
   id = req.params.id;
   try {
         const subject = await Subject.findByPk(id);

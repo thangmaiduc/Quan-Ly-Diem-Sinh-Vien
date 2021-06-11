@@ -87,7 +87,7 @@ router.post('/add-class',authUser, authRole('admin'), async(req, res, next)=>{
     }
 });
 //xoa lop hoc bang id
-router.delete("/delete.:id", authUser, authRole('admin'),async (req, res, next) => {
+router.delete("/delete/:id", authUser, authRole('admin'),async (req, res, next) => {
     id = req.params.id;
     try {
           const _class = await Class.findByPk(id);

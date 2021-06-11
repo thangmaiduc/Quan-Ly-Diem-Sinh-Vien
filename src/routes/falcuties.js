@@ -9,7 +9,10 @@ const { authUser, authRole } = require("../middlewave/auth");
 //liet ke toan bo khoa trong truong
 router.get("/",authUser, authRole('admin'), async (req, res, next) => {
   try {
-    let falcuties = await falcutyModel.findAll();
+    let falcuties = await falcutyModel.findAll({
+      include: classModel,
+      required: true
+    });
 
     if (!falcuties) {
       return res
@@ -46,7 +49,7 @@ router.get("/search=:search",authUser,async (req, res, next) => {
   }
 });
 // liet ke danh sach lop thuoc khoa
-router.get("/list-class.:falcutyId", authUser, authRole('admin'),async (req, res, next) => {
+router.get("/list-class/:falcutyId", authUser, authRole('admin'),async (req, res, next) => {
   const falcutyId = req.params.falcutyId;
   try {
     let listClass = await classModel.findAll({ where: { falcutyId } });
