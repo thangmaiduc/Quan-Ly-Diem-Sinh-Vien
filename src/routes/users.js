@@ -9,7 +9,7 @@ const Subject = require('../model/subjects')
 const jwt = require('jsonwebtoken')
 const { authUser, authRole } = require('../middlewave/auth')
 
-router.get('/', authUser, authRole('admin'), async (req, res, next) => {
+router.get('/', authUser, authRole('admin'),async (req, res, next) => {
   try {
     const listUser = await userModel.findAll({})
     return res.status(200).json(listUser)
@@ -21,6 +21,7 @@ router.get('/', authUser, authRole('admin'), async (req, res, next) => {
 router.get('/profile/me', authUser, async (req, res, next) => {
   try {
     const user = await userModel.findByPk(req.user.id)
+    
     return res.status(200).json(user)
   } catch (error) {
     return res.status(200).json(error)
