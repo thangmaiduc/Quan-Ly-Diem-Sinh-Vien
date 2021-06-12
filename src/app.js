@@ -29,6 +29,13 @@ const StudentHasSubject = require('./model/student_has_subject');
 // const swaggerUiExpress = require('swagger-ui-express');
 var app = express();
 
+app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', "*");
+  res.header('Access-Control-Allow-Methods','GET,PUT,POST,DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+})
+
 // const options = {
 //   definition: {
 //     openapi: '3.0.0',
@@ -87,12 +94,7 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-app.use(function(req, res, next) {
-  res.header('Access-Control-Allow-Origin', "*");
-  res.header('Access-Control-Allow-Methods','GET,PUT,POST,DELETE');
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
-  next();
-})
+
 
 userModel.hasOne(studentModel, {foreignKey: 'userId', onDelete: 'CASCADE'});
 userModel.hasOne(teacherModel, {foreignKey: 'userId', onDelete: 'CASCADE'});
