@@ -10,6 +10,7 @@ const CreditClass = require('../model/credit-class');
 const Score = require("../model/scores");
 const Teacher = require("../model/teachers");
 const { authGetCreditClass } = require("../middlewave/permissions");
+const Falcuty = require("../model/falcuties");
 
 const setCreditClass = async (req, res, next)=> {
   const creditClassId = parseInt(req.params.creditClassId);
@@ -131,7 +132,10 @@ router.get('/list-teacher-subject-class', authUser, authRole('admin') , async (r
     include:{
     model: Teacher,
     required: true,
-    
+    include:{
+      model: Falcuty,
+      required: true
+    }
   } ,
   } );
    const subjects =await Subject.findAll({});
