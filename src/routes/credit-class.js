@@ -8,6 +8,7 @@ const { authUser,    authRole} = require("../middlewave/auth");
 const Class = require("../model/classes");
 const CreditClass = require('../model/credit-class');
 const Score = require("../model/scores");
+const Teacher = require("../model/teachers");
 const { authGetCreditClass } = require("../middlewave/permissions");
 
 const setCreditClass = async (req, res, next)=> {
@@ -118,6 +119,25 @@ router.post('/add', authUser, authRole('admin') , async (req, res, next)=>{
   try {
     await CreditClass.create(req.body);
     res.status(201).send('Thêm thành công lớp tín chỉ')
+  } catch (error) {
+    res.status(500).send(error)
+  }
+});
+router.get('/list-teacher-subject-class', authUser, authRole('admin') , async (req, res, next)=>{
+  try {
+   const classes =await Class.findAll({});
+   let listTeacher= await userModel.findAll({
+      
+    include:{
+    model: teacherModel,
+    required: true,
+    
+  } ,
+  } );
+   const subjects =await Subject.findAll({});
+   
+
+   res.status(200).json({classes,listTeacher,subjects});
   } catch (error) {
     res.status(500).send(error)
   }

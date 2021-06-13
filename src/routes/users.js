@@ -14,7 +14,7 @@ router.get('/', authUser, authRole('admin'),async (req, res, next) => {
     const listUser = await userModel.findAll({})
     return res.status(200).json(listUser)
   } catch (error) {
-    return res.status(200).json(error)
+    return res.status(500).json(error)
   }
 })
 
@@ -63,7 +63,7 @@ router.get("/list-teacher/", authUser, authRole('admin'),async (req, res, next) 
       
     } ,
     } );
-
+    
     if (listTeacher.length == []) {
       return res
         .status(404)

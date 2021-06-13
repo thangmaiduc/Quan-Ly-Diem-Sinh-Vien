@@ -38,7 +38,7 @@ router.get(
     const scoreId = req.params.scoreid
 
     try {
-      let scores = await Score.findByPk(scoreId)
+      let scores = await Score.findByPk(scoreId);
       if (!scores) {
         scores = await Score.create({ id: scoreId })
       }
@@ -61,7 +61,7 @@ router.put(
       if (!(await Score.findByPk(scoreId))) {
         return res
           .status(404)
-          .json({ error: { message: 'Mã sinh viên không hợp lệ' } })
+          .json({ error: { message: 'Mã điểm không hợp lệ' } })
       }
       await Score.update(req.body, {
         fields: [

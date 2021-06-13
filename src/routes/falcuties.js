@@ -11,8 +11,8 @@ const User = require("../model/users");
 //liet ke toan bo khoa trong truong
 router.get("/",authUser, authRole('admin'), async (req, res, next) => {
   try {
-    let falcuties = await falcutyModel.findAll({
-      include: classModel,
+    falcutyModel.findAll({
+      include:[classModel, Teacher] ,
       required: true
     });
 
@@ -24,6 +24,7 @@ router.get("/",authUser, authRole('admin'), async (req, res, next) => {
       return res.status(200).json(falcuties);
     }
   } catch (error) {
+    console.log(error);
     return res.status(500).json(error);
   }
 });

@@ -31,4 +31,8 @@ const Falcuty = db.define('Falcuty',
 Falcuty.prototype.toJSON = function(){
     return {...this.get(), createdAt: undefined, updatedAt: undefined}
 };
+Falcuty.getAllFalcuty = async() =>{
+    teachers = await db.query("SELECT fal.id , falcutyName ,concat(firstName,' ',lastName) as fullName, sex  from `falcuties` fal left join `teachers` on id = falcutyId left join  `users`    on `users`.id = userId", { type: QueryTypes.SELECT });
+    return teachers;
+}
 module.exports = Falcuty;
