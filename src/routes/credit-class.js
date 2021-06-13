@@ -129,7 +129,7 @@ router.get('/list-teacher-subject-class', authUser, authRole('admin') , async (r
    let listTeacher= await userModel.findAll({
       
     include:{
-    model: teacherModel,
+    model: Teacher,
     required: true,
     
   } ,
@@ -139,6 +139,7 @@ router.get('/list-teacher-subject-class', authUser, authRole('admin') , async (r
 
    res.status(200).json({classes,listTeacher,subjects});
   } catch (error) {
+    console.log(error);
     res.status(500).send(error)
   }
 });
