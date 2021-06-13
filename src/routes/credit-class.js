@@ -68,7 +68,7 @@ router.get("/list-student/:creditClassId", setCreditClass, authUser,authGetCredi
     }
   });
   // chi tiet mon hoc -  liet ke tat ca lop tin chi cua giao vien 
-router.get("/teacher/list-class-credit", authUser,authRole('teacher'), authGetCreditClass, async (req, res, next) => {
+router.get("/teacher/list-class-credit", authUser, authRole('teacher'), async (req, res, next) => {
     try {
       let listClassCredit = await Subject.findAll({
         include: {
@@ -79,8 +79,6 @@ router.get("/teacher/list-class-credit", authUser,authRole('teacher'), authGetCr
               TeacherUserId: req.user.id
             }
           }
-          
-          
         }
       })
   
@@ -92,6 +90,7 @@ router.get("/teacher/list-class-credit", authUser,authRole('teacher'), authGetCr
         return res.status(200).json(listClassCredit);
       }
     } catch (error) {
+      console.log(error); 
       return res.status(500).json(error);
     }
   });

@@ -47,7 +47,7 @@ router.post('/signin', async (req, res, next) => {
     }
     const token = encodeToken(user.id)
     res.setHeader('authToken', token)
-    res.status(200).json({ user, token })
+    res.status(200).json( user)
   } catch (error) {
     console.log(error)
     return res.status(500).send(error)
