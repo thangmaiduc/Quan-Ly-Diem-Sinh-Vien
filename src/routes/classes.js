@@ -14,7 +14,7 @@ router.get('/', authUser, authRole('admin'), async(req, res, next)=>{
         
         if(!classes){
             
-            return res.status(404).json({error:{massage: "Chua co khoa nao, hay toa them khoa"}});
+            return res.status(404).json({error:{message: "Không có bất cứ lớp nào"}});
             
         }else{
             
@@ -34,7 +34,7 @@ router.get('/search=:search',authUser, async(req, res, next)=>{
         
         if(classes.length===0){
             
-            return res.status(404).json({error:{massage: "Khong tim thay lop hoc nao co ten: "+ search}});
+            return res.status(404).json({error:{message: "Khong tim thay lop hoc nao co ten: "+ search}});
             
         }else{
             
@@ -51,10 +51,10 @@ router.get('/list-student/:classId',authUser, authRole('admin'), async(req, res,
     try {
         const _class = await Class.findByPk(classId);
         let listStudent = await User.findAll({ include: {model: Student, where: { classId}}  });
-        if(!_class) return res.status(404).json({error:{massage: "Khong tim thay lop nao"}});
+        if(!_class) return res.status(404).json({error:{message: "Không tìm thấy lớp nào"}});
         if(listStudent===[]){
             
-            return res.status(400).json({error:{massage: "Lop chua co sinh vien nao"}});
+            return res.status(400).json({error:{message: "Lớp chưa có sinh viên nào"}});
             
         }else{
             
@@ -77,10 +77,10 @@ router.post('/add-class',authUser, authRole('admin'), async(req, res, next)=>{
              _class =await Class.create({className,FalcutyId: falcuty.id});
             return res.status(200).json(_class);
         }else if(!falcuty){
-            return res.status(404).json({error:{massage: "falcuty not exist "}});
+            return res.status(404).json({error:{message: "Khoa không tồn tại "}});
         }
         else{
-            return res.status(400).json({error:{massage: "Class has already exist "}});
+            return res.status(400).json({error:{message: "Lớp đã tồn tại "}});
         }
     } catch (error) {
         return res.status(500).json(error);
@@ -91,9 +91,9 @@ router.delete("/delete/:id", authUser, authRole('admin'),async (req, res, next) 
     id = req.params.id;
     try {
           const _class = await Class.findByPk(id);
-          if(!_class) return res.status(404).send('Khong tim thay lop hoc can xoa');
+          if(!_class) return res.status(404).json({error:{message:'Không tìm thấy lớp học cần xóa'}});
           await Class.destroy({where: {id}})
-          return res.status(200).send('Xoa lop hoc thanh cong');
+          return res.status(200).send('Xóa lớp học thành công');
       
     } catch (error) {
         console.log(error);

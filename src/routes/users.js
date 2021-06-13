@@ -43,7 +43,7 @@ router.post('/signin', async (req, res, next) => {
     if (!user) {
       res
         .status(404)
-        .json({ error: { massage: 'Email and Password is invalid' } })
+        .json({ error: { message: 'Email hoặc mật khẩu không hợp lệ' } })
     }
     const token = encodeToken(user.id)
     res.setHeader('authToken', token)
@@ -70,7 +70,7 @@ router.post(
         if (!_class) {
           return res
             .status(404)
-            .json({ error: { massage: 'Class not exist ' } })
+            .json({ error: { message: 'Lớp không tồn tại ' } })
         } else {
           await user.save()
           await studentModel.create({ userId: user.id, classId: classId })
@@ -81,7 +81,7 @@ router.post(
         if (!falcuty) {
           return res
             .status(404)
-            .json({ error: { massage: 'Falcuty not exist ' } })
+            .json({ error: { message: 'Khoa không tồn tại' } })
         } else {
           await user.save()
 
@@ -106,7 +106,7 @@ router.post(
     try {
       const _class = await classModel.findOne({ where: { id: classId } })
       if (!_class) {
-        return res.status(404).json({ error: { massage: 'Class not exist ' } })
+        return res.status(404).json({ error: { message: 'Lớp không tồn tại' } })
       } else {
         req.body.forEach(async (ele) => {
           const user = await userModel.create(ele)

@@ -58,7 +58,7 @@ router.get("/list-student/:creditClassId", setCreditClass, authUser,authGetCredi
       if (listStudentCreditClass.length === 0) {
         return res
           .status(404)
-          .json({ error: { massage: "Chua co sinh vien nao tham gia lop hoc" } });
+          .json({ error: { message: "Không có sinh nào tham gia lớp học" } });
       } else {
         return res.status(200).json(listStudentCreditClass);
       }
@@ -87,7 +87,7 @@ router.get("/teacher/list-class-credit", authUser,authRole('teacher'), authGetCr
       if (listClassCredit.length === 0) {
         return res
           .status(404)
-          .json({ error: { massage: "Giao vien chua duoc xep lop nao" } });
+          .json({ error: { message: "Giáo viên chưa được xếp lớp nào" } });
       } else {
         return res.status(200).json(listClassCredit);
       }
@@ -108,7 +108,7 @@ router.put('/scores-percent/edit/:creditClassId',setCreditClass, authUser ,authG
       await Score.update(req.body, {where: { studentHasSubjectId : { $in :listStudentCreditClassId }}});
     
       // return res.status(200).json(listStudentCreditClass);
-      return res.status(200).send('Them phan tram diem thanh cong ');
+      return res.status(200).send('Thêm phần trăm điểm thành phần thành công');
     } catch (error) {
       console.log(error);
       return res.status(500).send(error);
@@ -118,19 +118,18 @@ router.put('/scores-percent/edit/:creditClassId',setCreditClass, authUser ,authG
 router.post('/add', authUser, authRole('admin') , async (req, res, next)=>{
   try {
     await CreditClass.create(req.body);
-    res.status(201).send('them thanh cong lop tin chi')
+    res.status(201).send('Thêm thành công lớp tín chỉ')
   } catch (error) {
     res.status(500).send(error)
   }
 });
 // xep gv cho 1 lop tin chi
 router.put('/update', authUser, authRole('admin'), async (req, res, next)=>{
-  ClassId = req.body.ClassId;
-  SubjectId = req.body.SubjectId;
+  id = req.body.id;
   TeacherUserId = req.body.TeacherUserId;
   try {
-    await CreditClass.update({TeacherUserId}, {where:{ClassId, SubjectId}});
-    res.status(200).send('xep giao vien cho lop tin chi thanh cong')
+    await CreditClass.update({TeacherUserId}, {where:{id}});
+    res.status(200).send('Xếp giáo viên cho lớp tín chỉ thành công')
   } catch (error) {
     console.log(error);
     res.status(500).send(error)

@@ -17,7 +17,7 @@ router.get("/",authUser, authRole('admin'), async (req, res, next) => {
     if (!falcuties) {
       return res
         .status(404)
-        .json({ error: { massage: "Chua co khoa nao, hay toa them khoa" } });
+        .json({ error: { message: "Chua co khoa nao, hay toa them khoa" } });
     } else {
       return res.status(200).json(falcuties);
     }
@@ -40,7 +40,7 @@ router.get("/search=:search",authUser,async (req, res, next) => {
     if (falcuties.length===0) {
       return res
         .status(404)
-        .json({ error: { massage: "Khong co khoa nao ten: "+search } });
+        .json({ error: { message: "Khong co khoa nao ten: "+search } });
     } else {
       return res.status(200).json(falcuties);
     }
@@ -57,7 +57,7 @@ router.get("/list-class/:falcutyId", authUser, authRole('admin'),async (req, res
     if (!listClass) {
       return res
         .status(404)
-        .json({ error: { massage: "Chua co khoa nao, hay toa them khoa" } });
+        .json({ error: { message: "Chua co khoa nao, hay toa them khoa" } });
     } else {
       return res.status(200).json(listClass);
     }
@@ -78,7 +78,7 @@ router.post("/add-falcuty",authUser, authRole('admin'), async (req, res, next) =
     } else {
       return res
         .status(400)
-        .json({ error: { massage: "falcuty has already exist " } });
+        .json({ error: { message: "Tên khoa đã tồn tại" } });
     }
   } catch (error) {
     return res.status(500).json(error);
