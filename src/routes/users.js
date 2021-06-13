@@ -53,7 +53,50 @@ router.post('/signin', async (req, res, next) => {
     return res.status(500).send(error)
   }
 })
+router.get("/list-teacher/", authUser, authRole('admin'),async (req, res, next) => {
+  try {
+    let listTeacher= await userModel.findAll({
+      
+      include:{
+      model: teacherModel,
+      required: true,
+      
+    } ,
+    } );
 
+    if (listTeacher.length == []) {
+      return res
+        .status(404)
+        .json({ error: { message: "Không có bất cứ giáo viên nào" } });
+    } else {
+      return res.status(200).json(listTeacher);
+    }
+  } catch (error) {
+    return res.status(500).json(error);
+  }
+});
+router.get("/list-student/", authUser, authRole('admin'),async (req, res, next) => {
+  try {
+    let listStudent= await userModel.findAll({
+      
+      include:{
+      model: studentModel,
+      attributes: { exclude: ['Student']},
+      required: true,
+      
+    }  });
+
+    if (listStudent.length == []) {
+      return res
+        .status(404)
+        .json({ error: { message: "Không có bất cứ học sinh nào" } });
+    } else {
+      return res.status(200).json(listStudent);
+    }
+  } catch (error) {
+    return res.status(500).json(error);
+  }
+});
 router.post(
   '/add-user',
   authUser,

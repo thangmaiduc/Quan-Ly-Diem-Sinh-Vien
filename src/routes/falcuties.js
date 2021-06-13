@@ -2,7 +2,9 @@ var express = require("express");
 var router =new express.Router();
 const falcutyModel = require("../model/falcuties");
 const classModel = require("../model/classes");
+const Teacher = require("../model/teachers");
 const { authUser, authRole } = require("../middlewave/auth");
+const User = require("../model/users");
 // const db = require('../db/db')
 
 /* GET users listing. */
@@ -60,6 +62,26 @@ router.get("/list-class/:falcutyId", authUser, authRole('admin'),async (req, res
         .json({ error: { message: "Chua co khoa nao, hay toa them khoa" } });
     } else {
       return res.status(200).json(listClass);
+    }
+  } catch (error) {
+    return res.status(500).json(error);
+  }
+});
+router.get("/list-teacher/:falcutyId", authUser, authRole('admin'),async (req, res, next) => {
+  const falcutyId = req.params.falcutyId;
+  try {
+    let listTeacher= await User.findAll({include:{
+      model: Teacher,
+      required: true,
+      where: { falcutyId }
+    }  });
+
+    if (listTeacher.length == []) {
+      return res
+        .status(404)
+        .json({ error: { message: "Không có bất cứ giáo viên nào" } });
+    } else {
+      return res.status(200).json(listTeacher);
     }
   } catch (error) {
     return res.status(500).json(error);
