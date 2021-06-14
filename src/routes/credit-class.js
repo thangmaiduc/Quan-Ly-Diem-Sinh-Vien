@@ -126,7 +126,20 @@ router.put('/scores-percent/edit/:creditClassId',setCreditClass, authUser ,authG
   }) 
 // them lop tin chi
 router.post('/add', authUser, authRole('admin') , async (req, res, next)=>{
+  const {TeacherUserId,ClassId,SubjectId} = req.body;
   try {
+    if(!TeacherUserId)
+    {
+      res.status(400).send("Giáo viên không hợp lệ")
+    }
+    else if(!ClassId)
+    {
+      res.status(400).send("Lớp không hợp lệ")
+    }
+    else if(!SubjectId)
+    {
+      res.status(400).send("Môn học không hợp lệ")
+    }
     await CreditClass.create(req.body);
     res.status(201).send('Thêm thành công lớp tín chỉ')
   } catch (error) {
