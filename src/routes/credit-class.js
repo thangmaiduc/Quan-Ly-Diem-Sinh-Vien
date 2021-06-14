@@ -27,7 +27,16 @@ const setCreditClass = async (req, res, next)=> {
   }
 }
 
-
+router.get('/', async (req, res, next)=>{
+  
+  try {
+    listClassCredit =await CreditClass.getAllCreditClass();
+    res.status(200).json(listClassCredit)
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(error);
+  }
+})
 // liet ke tat ca sinh vien trong 1 lop tin chi
 router.get("/list-student/:creditClassId", setCreditClass, authUser,authGetCreditClass ,async (req, res, next) => {
    id = req.params.creditClassId ;
